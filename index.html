@@ -396,7 +396,7 @@ home(){
    h('div',{class:'tiles'},
      h('button',{class:'tile',onclick:()=>go_('vocab')},h('b',{},'Từ vựng'),h('span',{},'Thẻ từ có tranh thật, bấm để nghe phát âm.')),
      h('button',{class:'tile',onclick:()=>go_('patterns')},h('b',{},'Mẫu câu'),h('span',{},'Mẫu câu từng Unit kèm nghĩa tiếng Việt và luyện điền, xếp câu.')),
-     h('button',{class:'tile',onclick:()=>go_('games')},h('b',{},'Trò chơi'),h('span',{},'12 trò chơi: nối, lật thẻ, đoán chữ, ô chữ, cờ ca-rô…')),
+     h('button',{class:'tile',onclick:()=>go_('games')},h('b',{},'Trò chơi'),h('span',{},'11 trò chơi: nối, lật thẻ, xếp chữ, ô chữ, cờ ca-rô…')),
      h('button',{class:'tile',onclick:()=>go_('tests')},h('b',{},'Bài kiểm tra'),h('span',{},'Đề giữa kỳ gốc, đề ôn giữa kỳ và cuối kỳ. Máy chấm điểm ngay.'))),
    h('p',{class:'sub',style:'margin-top:18px'},'Giọng đọc: '+(VOICE?VOICE.name:'giọng mặc định của thiết bị')+'. Nên mở trên Chrome hoặc Edge để có giọng nữ Anh-Mỹ.'));
 },
@@ -428,7 +428,6 @@ games(){
    ['📝','Sắp xếp câu','Xếp các từ thành câu',()=>runQuiz(app,'Sắp xếp câu',makeGame('sent',sc),back)],
    ['🔗','Nối tranh – từ','Nối từ với tranh',()=>gMatch(sc)],
    ['🃏','Lật thẻ trí nhớ','Tìm cặp tranh và từ',()=>gMemory(sc)],
-   ['🪢','Treo cổ (Hangman)','Đoán chữ trước khi hết tim',()=>gHang(sc)],
    ['🔍','Ô chữ','Tìm từ trong bảng chữ',()=>gSearch(sc)],
    ['⭕','Cờ ca-rô','Trả lời đúng để đánh dấu X',()=>gTTT(sc)]];
   const back=()=>{app.replaceChildren();VIEWS.games()};
@@ -479,11 +478,6 @@ function gMemory(sc){const {st,head}=shell('Lật thẻ trí nhớ',backG);const
   cards.forEach(c=>{const b=h('button',{type:'button',class:'mc','aria-label':'thẻ úp',onclick:()=>{if(lock||b.classList.contains('up')||b.classList.contains('done'))return;b.classList.add('up');b.replaceChildren(c.k==='p'?image(c.pic):h('span',{},c.w));if(c.k==='t')speak(c.w);open.push([b,c]);
     if(open.length===2){lock=true;const [[b1,c1],[b2,c2]]=open;if(c1.w===c2.w&&c1.k!==c2.k){setTimeout(()=>{b1.classList.add('done');b2.classList.add('done');open=[];lock=false;found++;good(found===ws.length)},400)}else setTimeout(()=>{[b1,b2].forEach(x=>{x.classList.remove('up');x.textContent='?'});open=[];lock=false},900)}}},'?');g.append(b)});
   st.append(head(),h('p',{class:'sub'},'Lật hai thẻ để tìm cặp: tranh và từ giống nhau.'),g,h('div',{class:'actions'},h('button',{class:'btn',onclick:()=>{app.replaceChildren();gMemory(sc)}},'Chơi lại')))}
-function gHang(sc){const {st,head}=shell('Treo cổ (Hangman)',backG);const w=rnd(wordsOf(sc));let lives=6,got=new Set(),end=false;
-  const word=h('div',{class:'hmword'}),kb=h('div',{class:'kb'}),hearts=h('div',{class:'hearts'}),fb=h('div',{class:'fb'});
-  const draw=()=>{word.replaceChildren(...[...w.w].map(c=>h('span',{},got.has(c)?c:'')));hearts.textContent='❤'.repeat(lives)+'♡'.repeat(6-lives)};
-  'abcdefghijklmnopqrstuvwxyz'.split('').forEach(c=>kb.append(h('button',{type:'button',onclick:e=>{if(end||e.target.disabled)return;e.target.disabled=true;if(w.w.includes(c)){got.add(c);e.target.classList.add('ok');if([...w.w].every(x=>got.has(x))){end=true;good(true);fb.className='fb good';fb.textContent='Bạn đã đoán đúng: '+w.w;speak(w.w)}else{chime()}}else{e.target.classList.add('bad');lives--;buzz();if(!lives){end=true;fb.className='fb no';fb.textContent='Hết tim! Từ đúng là: '+w.w;[...w.w].forEach(x=>got.add(x))}}draw()}},c)));
-  draw();st.append(head(),h('div',{class:'hm'},h('div',{class:'pic q',style:'padding:8px'},h('div',{class:'pic',style:'margin:0'},image(w.pic))),hearts,word,kb,fb,h('div',{class:'actions'},spk(w.w),h('button',{class:'btn',onclick:()=>{app.replaceChildren();gHang(sc)}},'Từ khác'))))}
 function gSearch(sc){const {st,head}=shell('Ô chữ',backG);const N=9;const ws=shuf(wordsOf(sc)).map(x=>x.w).filter(w=>w.length<=N).slice(0,5);
   const g=Array.from({length:N},()=>Array(N).fill(''));const place=[];
   ws.forEach(w=>{for(let t=0;t<60;t++){const d=Math.random()<.5?[0,1]:[1,0];const r=Math.floor(Math.random()*(N-d[0]*(w.length-1))),c=Math.floor(Math.random()*(N-d[1]*(w.length-1)));let ok=true;for(let k=0;k<w.length;k++){const x=g[r+d[0]*k][c+d[1]*k];if(x&&x!==w[k])ok=false}if(ok){for(let k=0;k<w.length;k++)g[r+d[0]*k][c+d[1]*k]=w[k];place.push({w,r,c,d});break}}});

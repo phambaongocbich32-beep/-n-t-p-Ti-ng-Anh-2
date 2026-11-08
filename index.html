@@ -206,6 +206,34 @@ h2{font-size:1.7rem;color:var(--navy)} h3{font-size:1.2rem}
 .bub.teach{align-self:flex-start;background:var(--soft)} .bub.me{align-self:flex-end;background:var(--softgold)}
 .bub .swords{font-size:1.2rem;justify-content:flex-start;margin:2px 0}
 .ctl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;min-height:50px}
+
+.vid{container-type:inline-size;position:relative;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#cfe6f5;border:1px solid var(--line)}
+.vbg{position:absolute;inset:-20px;background-size:cover;background-position:center;filter:blur(14px) saturate(1.1) brightness(1.05);opacity:.9}
+.vmain{position:absolute;inset:0 0 22% 0;display:flex;align-items:center;justify-content:center;gap:4cqw;padding:3cqw 3cqw 0 22cqw}
+.vpic{background:#fff;border-radius:2.4cqw;height:100%;aspect-ratio:1;display:grid;place-items:center;padding:1.2cqw;box-shadow:0 1.2cqw 3cqw rgba(0,0,0,.2)}
+.vpic img{max-width:100%;max-height:100%;object-fit:contain}
+.vword{font:800 7cqw var(--fd);color:#fff;text-shadow:0 .5cqw 1.5cqw rgba(0,0,0,.45)}
+.vwide{height:100%;border-radius:2cqw;overflow:hidden;box-shadow:0 1.2cqw 3cqw rgba(0,0,0,.25);background:#fff}.vwide img{height:100%;width:auto;display:block}
+.vtitle{font:800 6cqw var(--fd);color:#fff;text-shadow:0 .5cqw 1.5cqw rgba(0,0,0,.5);text-align:center}
+.vinfo{display:flex;flex-direction:column;gap:1.2cqw}.vinfo>div,.vinfo>b{background:rgba(255,255,255,.93);color:#182a4d;border-radius:2cqw;padding:1cqw 2.4cqw;font-size:3.2cqw;display:flex;gap:1.6cqw;align-items:baseline}
+.vinfo small{color:#5d6a86;font-weight:700;font-size:2.2cqw}.vinfo b{font-family:var(--fd)}
+.vmain:has(.vtitle){flex-direction:column;padding-left:22cqw;gap:2cqw}
+.vava{position:absolute;left:1.5cqw;bottom:0;width:20cqw;height:auto;z-index:3}
+.vava svg{display:block;width:100%;height:auto;filter:drop-shadow(0 .6cqw 1cqw rgba(0,0,0,.25));transform-origin:50% 100%}
+.vid .vava{bottom:calc(22% - 1cqw)}
+.vid.wave .ava{animation:sway 1.4s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(-4deg)}}
+.vid.talk .mouth{animation:mo .26s infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes mo{from{transform:scaleY(.35)}to{transform:scaleY(2.2)}}
+.ava .eyes{animation:bl 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bl{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.vsub{position:absolute;left:0;right:0;bottom:0;height:22%;background:rgba(24,42,77,.92);display:grid;place-items:center;padding:0 3cqw 0 23cqw;text-align:center}
+.vsub .swords{font-size:3.6cqw;color:#fff;margin:0;line-height:1.2}.vsub .sw.on{background:var(--gold);color:#182a4d}
+.vsub .hint{color:#ffd770;font-weight:800;font-size:2.4cqw;margin-top:.4cqw}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.dot{width:12px;height:12px;border-radius:50%;border:0;background:var(--line);padding:0}.dot.on{background:var(--gold);transform:scale(1.3)}
+.sel,.pin{border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:6px 10px;font:700 1rem var(--fb)}
+.pin{width:100%}
 #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 120px);transform:translateX(-50%) scale(.9);background:var(--gold);color:#182a4d;font:800 2rem var(--fd);padding:10px 30px;border-radius:99px;z-index:60;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .toast.show{opacity:1;transform:translateX(-50%) scale(1)}
@@ -401,7 +429,7 @@ function genTest(sc,name){const pool=wordsOf(sc),us=unitsOf(sc);const take=(n)=>
   {t:'6',title:'Put the words in order.',vi:'Sắp xếp các từ thành câu',items:[qSent(us),qSent(us),qSent(us)]}]}}
 
 /* ---------- ROUTER / VIEWS ---------- */
-const TABS=[['home','Trang chủ'],['vocab','Từ vựng'],['patterns','Mẫu câu'],['exercises','Bài tập'],['speaking','Luyện nói'],['games','Trò chơi'],['tests','Bài kiểm tra']];
+const TABS=[['home','Trang chủ'],['vocab','Từ vựng'],['patterns','Mẫu câu'],['exercises','Bài tập'],['speaking','Luyện nói'],['present','Thuyết trình'],['games','Trò chơi'],['tests','Bài kiểm tra']];
 const nav=$('#nav'),app=$('#app');
 TABS.forEach(([id,l])=>nav.append(h('button',{type:'button','data-id':id,onclick:()=>{location.hash=id;route()}},l)));
 function route(){const id=(location.hash||'#home').slice(1);const v=VIEWS[id]?id:'home';nav.querySelectorAll('button').forEach(b=>b.toggleAttribute('aria-current',b.dataset.id===v)||0);nav.querySelectorAll('button').forEach(b=>{if(b.dataset.id===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});app.replaceChildren();$('#modal').replaceChildren();try{speechSynthesis.cancel()}catch(e){}VIEWS[v]();scrollTo(0,0)}
@@ -420,6 +448,7 @@ home(){
      h('button',{class:'tile',onclick:()=>go_('patterns')},h('b',{},'Mẫu câu'),h('span',{},'Mẫu câu từng Unit kèm nghĩa tiếng Việt và luyện điền, xếp câu.')),
      h('button',{class:'tile',onclick:()=>go_('exercises')},h('b',{},'Bài tập'),h('span',{},'Bài tập theo từng Unit và Review, máy chấm từng bài.')),
      h('button',{class:'tile',onclick:()=>go_('speaking')},h('b',{},'Luyện nói'),h('span',{},'Đọc theo cô, hỏi đáp, đóng vai, nhìn tranh nói.')),
+     h('button',{class:'tile',onclick:()=>go_('present')},h('b',{},'Thuyết trình'),h('span',{},'Xem bạn nhỏ thuyết trình mẫu, rồi em tự giới thiệu bản thân.')),
      h('button',{class:'tile',onclick:()=>go_('games')},h('b',{},'Trò chơi'),h('span',{},'11 trò chơi: nối, lật thẻ, xếp chữ, ô chữ, cờ ca-rô…')),
      h('button',{class:'tile',onclick:()=>go_('tests')},h('b',{},'Bài kiểm tra'),h('span',{},'Đề giữa kỳ gốc, đề ôn giữa kỳ và cuối kỳ. Máy chấm điểm ngay.'))),
    h('p',{class:'sub',style:'margin-top:18px'},'Giọng đọc: '+(VOICE?VOICE.name:'giọng mặc định của thiết bị')+'. Nên mở trên Chrome hoặc Edge để có giọng nữ Anh-Mỹ.'));
@@ -737,6 +766,90 @@ function autoMode(n,back){
       else{if(r.state==='unsupported')await new Promise(rs=>setTimeout(rs,dur));info.textContent=r.state==='none'?'Cô chưa nghe rõ, mình đi tiếp nhé!':'Giỏi lắm! Tiếp tục nào.';}
       await new Promise(rs=>setTimeout(rs,1300))}
     if(stop)return;good(true);addStar(2);st.replaceChildren(h('div',{class:'card result'},h('div',{class:'stars-row'},'★★★'),h('p',{},'Em đã luyện xong cả Unit! Great job!'),h('div',{class:'actions'},h('button',{class:'btn',onclick:()=>autoMode(n,back)},'Luyện lại'),h('button',{class:'btn alt',onclick:back},'Về danh sách'))))})()}
+
+/* ================= THUYẾT TRÌNH ================= */
+const PRES={
+ 1:{open:"It's my birthday party!",body:[['pasta',['I like pasta.','The pasta is yummy.']],['pizza',['I like pizza.','The pizza is yummy.']],['popcorn',['I like popcorn.','The popcorn is yummy.']]]},
+ 2:{open:"I'm in the backyard.",body:[['kite',['I see a kite.','Is she flying a kite?','Yes, she is.']],['bike',['I see a bike.','Is he riding a bike?','Yes, he is.']],['kitten',['I see a kitten.','Is she playing with a kitten?','Yes, she is.']]]},
+ 3:{open:"We're at the seaside.",body:[['sea',["Let's look at the sea!","I can see the sea."]],['sail',["Let's look at the sail!","I can see the sail."]],['sand',["Let's look at the sand!","I can see the sand."]]]},
+ 4:{open:"I'm in the countryside.",body:[['rainbow',['What can you see?','I can see a rainbow.']],['river',['What can you see?','I can see a river.']],['road',['What can you see?','I can see a road.']]]},
+ 5:{open:"I'm in the classroom.",body:[['quiz',["What's he doing?","He's doing a quiz."]],['square',["What's he doing?","He's colouring a square."]],['question',["What's he doing?","He's answering a question."]]]},
+ 6:{open:"I'm on the farm.",body:[['box',['I can see a box on the farm.','Is there a fox?','Yes, there is.']],['fox',['I can see a fox on the farm.','There is a fox in the box.']],['ox',['I can see an ox on the farm.','Is there an ox?','Yes, there is.']]]},
+ 7:{open:"I'm in the kitchen.",body:[['jelly',['I like jelly.','Pass me the jelly, please.','Here you are.']],['juice',['I like juice.','Pass me the juice, please.','Here you are.']],['jam',['I like jam.','Pass me the jam, please.','Here you are.']]]},
+ 8:{open:"I'm in the village.",body:[['village',['This is a village.','Can you draw a village?','Yes, I can.']],['van',['This is a van.','Can you draw a van?','Yes, I can.']],['volleyball',['This is a volleyball.','Can you draw a volleyball?','Yes, I can.']]]}
+};
+let PV={name:'',age:'8',cls:'',school:''};
+const AVA=`<svg viewBox="0 0 120 150" class="ava" aria-hidden="true"><path d="M20 150c2-26 18-38 40-38s38 12 40 38z" fill="#f08fb4"/><path d="M48 112l12 14 12-14z" fill="#fff"/>
+<circle cx="22" cy="70" r="13" fill="#5b3a29"/><circle cx="98" cy="70" r="13" fill="#5b3a29"/><ellipse cx="60" cy="52" rx="42" ry="40" fill="#5b3a29"/>
+<circle cx="60" cy="68" r="35" fill="#ffd9b8"/><path d="M25 62c4-26 20-36 40-34 18 2 30 14 30 34-12-4-22-14-26-22-6 12-26 20-44 22z" fill="#5b3a29"/>
+<g class="eyes"><ellipse cx="46" cy="72" rx="4.5" ry="6" fill="#2b1a12"/><ellipse cx="74" cy="72" rx="4.5" ry="6" fill="#2b1a12"/><circle cx="47.5" cy="70" r="1.6" fill="#fff"/><circle cx="75.5" cy="70" r="1.6" fill="#fff"/></g>
+<circle cx="38" cy="84" r="5.5" fill="#ff9fa8" opacity=".6"/><circle cx="82" cy="84" r="5.5" fill="#ff9fa8" opacity=".6"/>
+<ellipse class="mouth" cx="60" cy="88" rx="7" ry="3.2" fill="#c2413a"/>
+<path d="M44 34c-10-8-22-4-22 4 4 6 14 6 22-4zm32 0c10-8 22-4 22 4-4 6-14 6-22-4z" fill="#ff6fa3"/><circle cx="60" cy="36" r="5" fill="#ff4f8f"/></svg>`;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const fillVals=v=>({name:v.name||'Lam',age:v.age||'8',cls:v.cls||'2/20'});
+function lineText(l,v,ph=true){const val=l.key?(v[l.key]||(ph?'______':'')):'';return [l.pre,val,l.post].filter(Boolean).join(' ').replace(/ \./g,'.').replace(/ ,/g,',')}
+function presSlides(n,v){
+  const P=PRES[n];const intro=[{pre:'Hello everybody.'},{pre:'My name is',key:'name',post:'.'},{pre:"I'm",key:'age',post:'years old.'},{pre:"I'm a pupil in class",key:'cls',post:v.school?`at ${v.school}.`:'.'}];
+  const S=[{type:'intro',img:'sc'+n,lines:intro},{type:'scene',img:'mm'+n,lines:[{pre:P.open}]}];
+  P.body.forEach(([w,ls])=>S.push({type:'word',img:w,word:w,lines:ls.map(t=>({pre:t}))}));
+  S.push({type:'end',img:'sc'+n,lines:[{pre:'Thank you for listening.'},{pre:'Goodbye!'}]});return S}
+async function speakLine(l,v,rate,cb,my,alive){
+  const text=lineText(l,v);if(!l.key||v[l.key]){await say(text.replace(/______/g,''),rate,cb);return}
+  if(l.pre){await say(l.pre,rate,k=>cb(k))}if(!alive())return;await sleep(3600);if(!alive())return;
+  const po=(l.post||'').replace(/[.\s]/g,'')?l.post:'';if(po)await say(po,rate)}
+function presPlayer(n){
+  const root=h('div');const slides=()=>presSlides(n,PV);let idx=0,tok=0,playing=false;
+  const vid=h('div',{class:'vid'});const ava=h('div',{class:'vava',html:AVA});const main=h('div',{class:'vmain'});const sub=h('div',{class:'vsub'});const bg=h('div',{class:'vbg'});
+  vid.append(bg,main,ava,sub);
+  const dots=h('div',{class:'dots'});const playB=h('button',{class:'btn',type:'button'},'▶ Xem video');
+  const rate=h('select',{id:'prate','aria-label':'Tốc độ đọc',class:'sel'},h('option',{value:'.7'},'Chậm'),h('option',{value:'.85',selected:true},'Vừa'),h('option',{value:'1'},'Nhanh'));
+  function render(k,v=PV){const S=slides();const s=S[k];bg.style.backgroundImage=`url(${src(s.img.startsWith('sc')||s.img.startsWith('mm')?s.img:'sc'+n)})`;
+    const nm=h('div',{class:'vcard2'});
+    if(s.type==='intro'){main.replaceChildren(h('div',{class:'vtitle'},'Hello everybody!'),h('div',{class:'vinfo'},h('div',{},h('small',{},'My name is'),h('b',{},v.name||'______')),h('div',{},h('small',{},"I'm"),h('b',{},(v.age||'___')+' years old')),h('div',{},h('small',{},'Class'),h('b',{},v.cls||'______'))))}
+    else if(s.type==='scene'){main.replaceChildren(h('div',{class:'vwide'},image(s.img)))}
+    else if(s.type==='word'){main.replaceChildren(h('div',{class:'vpic'},image(s.img)),h('div',{class:'vword'},s.word))}
+    else{main.replaceChildren(h('div',{class:'vtitle'},'Thank you!'),h('div',{class:'vinfo'},h('b',{},'Goodbye! 👋')))}
+    sub.replaceChildren(h('div',{class:'sline2'},' '));[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===k));vid.classList.toggle('wave',s.type==='intro'||s.type==='end')}
+  const setDots=()=>{dots.replaceChildren(...slides().map((_,i)=>h('button',{type:'button',class:'dot','aria-label':'Slide '+(i+1),onclick:()=>jump(i)})))};
+  const setTalk=b=>vid.classList.toggle('talk',b);
+  async function run(from){const my=++tok;playing=true;playB.textContent='⏸ Tạm dừng';const alive=()=>my===tok;
+    const S=slides();for(let k=from;k<S.length;k++){if(!alive())return;idx=k;render(k);await sleep(600);
+      for(const l of S[k].lines){if(!alive())return;const se=sentenceEl(lineText(l,PV));const blank=l.key&&!PV[l.key];sub.replaceChildren(h('div',{class:'sline2'},se,blank?h('div',{class:'hint'},'🎤 Em tự nói: '+({name:'tên của em',age:'tuổi của em',cls:'lớp của em'}[l.key])):''));setTalk(true);
+        await speakLine(l,PV,+rate.value,k2=>se.hl(k2),my,alive);setTalk(false);se.hl(-1);await sleep(250)}
+      await sleep(500)}
+    if(alive()){playing=false;playB.textContent='▶ Xem lại';setTalk(false);fireworks(7);chime();toast('Great job!');addStar(1)}}
+  function stop(){tok++;playing=false;try{speechSynthesis.cancel()}catch(e){}setTalk(false);playB.textContent='▶ Tiếp tục'}
+  function jump(i){const was=playing;stop();idx=Math.max(0,Math.min(i,slides().length-1));render(idx);if(was)run(idx)}
+  playB.onclick=()=>{if(playing)stop();else run(idx>=slides().length-1&&playB.textContent.includes('lại')?0:idx)};
+  root.append(vid,h('div',{class:'actions'},h('button',{class:'btn alt',type:'button',onclick:()=>jump(idx-1)},'⏮'),playB,h('button',{class:'btn alt',type:'button',onclick:()=>jump(idx+1)},'⏭'),h('label',{class:'sub',style:'margin:0'},'Tốc độ ',rate)),dots);
+  root.refresh=()=>{stop();playB.textContent='▶ Xem video';idx=0;setDots();render(0)};
+  root.stop=stop;setDots();render(0);return root}
+function scriptCard(n){const S=presSlides(n,PV);return h('div',{class:'card'},h('h3',{},'Lời thuyết trình'),h('div',{class:'sub',style:'margin:2px 0 8px'},'Chỗ ______ là phần học sinh tự nói về mình.'),S.flatMap(s=>s.lines).map(l=>h('div',{class:'sline'},spk(lineText(l,PV,false).replace(/^$/,'')||l.pre),h('div',{class:'en',style:'font-weight:700'},lineText(l,PV)))))}
+function selfPresent(n,back){
+  app.replaceChildren();const st=h('div',{class:'stage'});app.append(st);const S=presSlides(n,PV);let i=0,hide=false,t0=Date.now();
+  (async()=>{await startMic()})();
+  const draw=()=>{const s=S[i];const lines=s.lines.map(l=>lineText(l,PV));
+    st.replaceChildren(h('div',{class:'qh'},h('h2',{},'Em thuyết trình'),h('b',{},`${i+1}/${S.length}`)),h('div',{class:'bar'},h('i',{style:`width:${i/S.length*100}%`})),
+      h('div',{class:'q',style:'text-align:center'},h('div',{class:'pic',style:s.type==='scene'?'width:min(520px,100%)':''},image(s.img)),hide?h('div',{class:'sub'},'Em hãy nhớ và nói to nhé!'):h('div',{},lines.map(t=>h('div',{class:'swords',style:'font-size:1.4rem'},t))),h('div',{class:'actions'},h('button',{class:'btn alt',type:'button',onclick:()=>say(lines.join(' ').replace(/______/g,''),.82)},'🔊 Nghe mẫu'),h('button',{class:'btn alt',type:'button',onclick:()=>{hide=!hide;draw()}},hide?'Hiện lời':'Ẩn lời'))),
+      h('div',{class:'actions'},h('button',{class:'btn alt',type:'button',onclick:async()=>{await stopMic();back()}},'‹ Thoát'),h('button',{class:'btn alt',type:'button',disabled:i===0,onclick:()=>{i--;draw()}},'‹ Trước'),h('button',{class:'btn',type:'button',onclick:()=>{i++;i>=S.length?fin():draw()}},i===S.length-1?'Kết thúc':'Tiếp ›')))};
+  const fin=async()=>{const url=await stopMic();const sec=Math.round((Date.now()-t0)/1000);good(true);addStar(3);
+    st.replaceChildren(h('div',{class:'card result'},h('div',{class:'stars-row'},'★★★'),h('div',{class:'big'},'Great job!'),h('p',{},`Em đã thuyết trình xong trong ${sec} giây.`),url?h('audio',{controls:true,src:url,style:'width:100%'}):h('p',{class:'sub'},'Máy chưa ghi âm được. Em có thể nhờ cô hoặc bố mẹ quay video khi em thuyết trình nhé.'),h('div',{class:'actions'},h('button',{class:'btn',onclick:()=>selfPresent(n,back)},'Thuyết trình lại'),h('button',{class:'btn alt',onclick:back},'Về danh sách'))))};
+  draw()}
+VIEWS.present=function(){
+  let n=1,mode='video';const top=h('div'),body=h('div');let player=null;
+  const inp=(id,lab,k,ph,w)=>h('div',{style:w?`flex:${w}`:'flex:1;min-width:130px'},h('label',{for:id,class:'sub',style:'display:block;margin:0;font-weight:800;font-size:.85rem'},lab),h('input',{id,value:PV[k],placeholder:ph,autocomplete:'off',class:'pin',oninput:e=>{PV[k]=e.target.value;refresh()}}));
+  const form=h('div',{class:'card',style:'display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px'},inp('pn','Tên của em (My name is…)','name','Để trống để tự nói'),inp('pa','Tuổi','age','8','0 0 90px'),inp('pc','Lớp (class…)','cls','Ví dụ: 2/20'),inp('ps','Trường (không bắt buộc)','school','Có thể để trống'));
+  let rt;const refresh=()=>{clearTimeout(rt);rt=setTimeout(()=>{if(mode==='video'&&player)player.refresh();const sc=$('#scr');if(sc)sc.replaceWith(scriptCard(n)).valueOf;draw2()},350)};
+  const draw2=()=>{const old=$('#scr');if(old){const c=scriptCard(n);c.id='scr';old.replaceWith(c)}};
+  const draw=()=>{if(player)player.stop();top.replaceChildren(h('div',{class:'chips'},U.map(u=>h('button',{type:'button',class:'chip','aria-pressed':String(u.n===n),onclick:()=>{n=u.n;draw()}},'Unit '+u.n+': '+u.vi))),
+      h('div',{class:'chips'},[['video','🎬 Xem bạn nhỏ thuyết trình'],['read','🗣️ Luyện đọc từng câu'],['self','🎤 Em thuyết trình']].map(([k,l])=>h('button',{type:'button',class:'chip','aria-pressed':String(k===mode),onclick:()=>{mode=k;draw()}},l))));
+    body.replaceChildren();
+    if(mode==='video'){player=presPlayer(n);body.append(player,(()=>{const c=scriptCard(n);c.id='scr';c.style.marginTop='14px';return c})())}
+    else if(mode==='read'){body.append(h('div',{class:'card'},h('h3',{},'Luyện đọc từng câu của bài thuyết trình'),h('p',{class:'sub'},'Cô đọc mẫu, em đọc theo. Nếu em chưa điền tên và lớp, bài sẽ dùng tên mẫu Lam, 8 tuổi, lớp 2/20.'),h('button',{class:'btn',onclick:()=>{const v=fillVals(PV);const V={...PV,...v};const S=presSlides(n,V);const items=S.flatMap(s=>s.lines.map(l=>({text:lineText(l,V),pic:s.type==='word'?s.img:'sc'+n})));stepper(items,'Luyện đọc thuyết trình',()=>{app.replaceChildren();VIEWS.present()})}},'Bắt đầu luyện đọc')),(()=>{const c=scriptCard(n);c.id='scr';c.style.marginTop='14px';return c})())}
+    else{body.append(h('div',{class:'card'},h('h3',{},'Em tự thuyết trình'),h('p',{class:'sub'},'Em đứng trước màn hình và thuyết trình từng slide. Máy sẽ ghi âm giọng em (cần cho phép micro) để em nghe lại. Có thể bấm "Ẩn lời" để thử nhớ bài.'),h('button',{class:'btn',onclick:()=>selfPresent(n,()=>{app.replaceChildren();VIEWS.present()})},'Bắt đầu thuyết trình')),(()=>{const c=scriptCard(n);c.id='scr';c.style.marginTop='14px';return c})())}};
+  draw();app.append(h('h2',{},'Thuyết trình'),h('p',{class:'sub'},'Xem bạn nhỏ giọng Anh-Mỹ thuyết trình mẫu cho từng Unit, rồi em tự thuyết trình về mình. Em điền tên, tuổi, lớp vào ô bên dưới. Nếu để trống, video sẽ dừng lại để em tự nói.'),form,top,body);
+};
 
 route();
 addEventListener('pointerdown',()=>{try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.state==='suspended'&&AC.resume()}catch(e){}},{once:true});
